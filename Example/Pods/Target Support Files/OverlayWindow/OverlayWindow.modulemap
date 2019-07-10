@@ -1,0 +1,6 @@
+framework module OverlayWindow {
+  umbrella header "OverlayWindow-umbrella.h"
+
+  export *
+  module * { export * }
+}

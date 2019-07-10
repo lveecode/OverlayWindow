@@ -1,0 +1,16 @@
+PODS:
+  - OverlayWindow (0.1.0)
+
+DEPENDENCIES:
+  - OverlayWindow (from `../`)
+
+EXTERNAL SOURCES:
+  OverlayWindow:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  OverlayWindow: 6ffa4f8c7f0d7723e2436c05274ec20a033b51bc
+
+PODFILE CHECKSUM: ed45917c4ef1706b550ad59c65bee0efea9a1650
+
+COCOAPODS: 1.7.4

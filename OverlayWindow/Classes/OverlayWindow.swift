@@ -7,17 +7,17 @@ import UIKit
     
     @objc public static let shared = OverlayWindow()
     
-    private var topWindow: UIWindow? = nil
+    @objc public var displayingWindow: UIWindow? = nil
     
     /// Creates a new window on top of the existing ones
     /// and displayes your controller in it
     ///
     /// - Parameter controller: Controller to display in an overlay window
     @objc public static func presentOverlayWindow(withController controller: UIViewController) {
-        shared.topWindow = UIWindow(frame: UIScreen.main.bounds)
-        shared.topWindow?.rootViewController = controller
+        shared.displayingWindow = UIWindow(frame: UIScreen.main.bounds)
+        shared.displayingWindow?.rootViewController = controller
         
-        display(window: shared.topWindow!)
+        display(window: shared.displayingWindow!)
     }
     
     
@@ -26,24 +26,24 @@ import UIKit
     /// - Parameter completion: A block to be performed after the window was dismissed
     @objc public static func dismissOverlayWindow(completion: (()->Void)? = nil) {
         
-        if shared.topWindow == nil {
+        if shared.displayingWindow == nil {
             completion?()
             return
         }
         
         // Dismissing modals, if any
-        if shared.topWindow?.rootViewController?.presentedViewController != nil {
-            shared.topWindow?.rootViewController?.dismiss(animated: true, completion: {})
+        if shared.displayingWindow?.rootViewController?.presentedViewController != nil {
+            shared.displayingWindow?.rootViewController?.dismiss(animated: true, completion: {})
         }
         
         UIView.animate(withDuration: 0.2,
                        animations: {
-                        shared.topWindow?.alpha = 0
+                        shared.displayingWindow?.alpha = 0
         },
                        completion: { (finished) in
                         // Precaution to insure window gets destroyed
-                        shared.topWindow?.isHidden = true
-                        shared.topWindow = nil
+                        shared.displayingWindow?.isHidden = true
+                        shared.displayingWindow = nil
                         
                         completion?()
         })

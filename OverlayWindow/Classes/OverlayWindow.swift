@@ -25,31 +25,35 @@ import UIKit
     ///
     /// - Parameter completion: A block to be performed after the window was dismissed
     @objc public static func dismissOverlayWindow(completion: (()->Void)? = nil) {
+        dismissWindown(shared.displayingWindow, completion: {
+            shared.displayingWindow = nil
+        })
+    }
+    
+    @objc public static func dismissWindown(_ window: UIWindow?, completion: (()->Void)? = nil) {
         
-        if shared.displayingWindow == nil {
+        if window == nil {
             completion?()
             return
         }
         
         // Dismissing modals, if any
-        if shared.displayingWindow?.rootViewController?.presentedViewController != nil {
-            shared.displayingWindow?.rootViewController?.dismiss(animated: true, completion: {})
+        if window?.rootViewController?.presentedViewController != nil {
+            window?.rootViewController?.dismiss(animated: true, completion: {})
         }
         
         UIView.animate(withDuration: 0.2,
                        animations: {
-                        shared.displayingWindow?.alpha = 0
+                        window?.alpha = 0
         },
                        completion: { (finished) in
                         // Precaution to insure window gets destroyed
-                        shared.displayingWindow?.isHidden = true
-                        shared.displayingWindow = nil
-                        
+                        window?.isHidden = true
                         completion?()
         })
     }
     
-    private static func display(window: UIWindow) {
+    @objc public static func display(window: UIWindow) {
         // Window level is above the top window (this makes the alert, if it's a sheet, show over the keyboard)
         let topWindow = UIApplication.shared.windows.last
         window.windowLevel = UIWindow.Level(rawValue: topWindow?.windowLevel.rawValue ?? 0 + 1)

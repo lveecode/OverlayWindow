@@ -27,6 +27,7 @@ import UIKit
     @objc public static func dismissOverlayWindow(completion: (()->Void)? = nil) {
         dismissWindown(shared.displayingWindow, completion: {
             shared.displayingWindow = nil
+            completion?()
         })
     }
     

@@ -15,6 +15,7 @@ import UIKit
     /// - Parameter controller: Controller to display in an overlay window
     @objc public static func presentOverlayWindow(withController controller: UIViewController) {
         shared.displayingWindow = UIWindow(frame: UIScreen.main.bounds)
+        shared.displayingWindow?.accessibilityViewIsModal = true
         shared.displayingWindow?.rootViewController = controller
         
         display(window: shared.displayingWindow!)

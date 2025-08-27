@@ -54,27 +54,23 @@ import UIKit
     }
     
     @objc public static func display(window: UIWindow) {
-        // Window level will be set to 'above the current top window' (this makes the alert, if it's a sheet, show over the keyboard)
-
         // Pre-UIWindowScene approach as a default
-        let topWindow = UIApplication.shared.windows.last
-        var windowLevel = UIWindow.Level(rawValue: topWindow?.windowLevel.rawValue ?? 0 + 1)
+        let filteredArray = UIApplication.shared.windows.filter { window in
+            window.isKeyWindow
+        }
+        var topWindow: UIWindow? = filteredArray.first
         
-        if #available(iOS 13.0, *) {
-            // If the app is using UIWindowScene lifecycle
-            if let windowScene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-               let topWindow = windowScene.windows.last {
-                windowLevel = UIWindow.Level(rawValue: topWindow.windowLevel.rawValue + 1)
-                window.windowScene = windowScene
-            }
+        // If the app is using UIWindowScene lifecycle
+        if let windowScene = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .first(where: { $0.activationState == .foregroundActive }),
+           let lastWindow = windowScene.windows.last {
+            topWindow = lastWindow
+            window.windowScene = windowScene
         }
         
-        if (windowLevel.rawValue == 0) {
-            // Just in case we still failed to calculate windowLevel
-            windowLevel = UIWindow.Level.alert
-        }
+        // Window level will be set to 'above the current top window' (this makes the alert, if it's a sheet, show over the keyboard)
+        let windowLevel = (topWindow?.windowLevel ?? UIWindow.Level.alert) + 1
         
         // If we somehow got to status bar level, go under it
         window.windowLevel = min(windowLevel, UIWindow.Level.statusBar - 1)

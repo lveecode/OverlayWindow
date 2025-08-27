@@ -1,6 +1,0 @@
-framework module Pods_OverlayWindow_Tests {
-  umbrella header "Pods-OverlayWindow_Tests-umbrella.h"
-
-  export *
-  module * { export * }
-}
